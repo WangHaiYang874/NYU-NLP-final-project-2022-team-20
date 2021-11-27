@@ -28,7 +28,7 @@ Please put your name next to the todo that you would like to do or you have done
     - [ ] feature selection: Partly done by Haiyang
     - [ ] what else?  
 - [ ] first layer models: these are the binary classifiers for pseudo-cognitive functions
-- [ ] second layer model: this the the neural network taking input from previous layer to predict personality
+- [ ] second layer model: this the the neural network taking input from previous layer to predict personality. (Haiyang)
 - [ ] evaluation 
 - [ ] writing the paper
     - [ ] draw graphs
