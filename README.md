@@ -30,6 +30,6 @@ Please put your name next to the todo that you would like to do or you have done
 - [ ] first layer models: these are the binary classifiers for pseudo-cognitive functions
 - [ ] second layer model: this the the neural network taking input from previous layer to predict personality. (Haiyang)
 - [ ] evaluation 
-- [ ] writing the paper
-    - [ ] draw graphs
-- [ ] reading some relevant psychological papers for ideas, perhaps? 
+- [ ] writing the paper Jiajie Zou
+    - [ ] draw graphs Jiajie Zou
+- [ ] reading some relevant psychological papers for ideas, perhaps? Jiajie Zou
