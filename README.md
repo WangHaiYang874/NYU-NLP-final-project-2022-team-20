@@ -27,8 +27,10 @@ Please put your name next to the todo that you would like to do or you have done
     - [x] development dataset: Done by Haiyang
     - [ ] feature selection: Partly done by Haiyang
     - [ ] what else?  
-- [ ] first layer models: these are the binary classifiers for pseudo-cognitive functions
+- [ ] first layer models: these are the binary classifiers for pseudo-cognitive functions (Haiyang)
 - [ ] second layer model: this the the neural network taking input from previous layer to predict personality. (Haiyang)
+    - [ ] trained a few simple second layer model
+    - [ ] 
 - [ ] evaluation 
 - [ ] writing the paper
     - [ ] draw graphs
