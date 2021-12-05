@@ -22,7 +22,7 @@ Please put your name next to the todo that you would like to do or you have done
 
 - [x] the proposal: finished collectively
 - [ ] feature extraction/selection/data cleaning
-    - [ ] emoticons : Done by Oishika
+    - [x] emoticons : Done by Oishika
     - [ ] tfidf
     - [x] development dataset: Done by Haiyang
     - [ ] feature selection: Partly done by Haiyang
