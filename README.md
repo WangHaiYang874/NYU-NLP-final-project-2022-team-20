@@ -23,15 +23,18 @@ Please put your name next to the todo that you would like to do or you have done
 - [x] the proposal: finished collectively
 - [ ] feature extraction/selection/data cleaning
     - [ ] emoticons
-    - [ ] tfidf
-    - [x] development dataset: Done by Haiyang
-    - [ ] feature selection: Partly done by Haiyang
-    - [ ] what else?  
-- [ ] first layer models: these are the binary classifiers for pseudo-cognitive functions (Haiyang)
+    - [x] tfidf: (Haiyang and Vincent)
+    - [x] topic extraction: (Vincent)
+    - [x] development dataset: (Haiyang)
+    - [x] feature selection: (Haiyang)
+    - [ ] dimension reduction
+- [ ] first layer models: (Haiyang)
 - [ ] second layer model: this the the neural network taking input from previous layer to predict personality. (Haiyang)
-    - [ ] trained a few simple second layer model
-    - [ ] 
+    - [ ] chunk max pool, 
+    - [x] activations, 
+    - [ ] k max
+    - [ ] deeper models when the dataset is large enough?
+    - [ ] profiling the training process. 
 - [ ] evaluation 
 - [ ] writing the paper
     - [ ] draw graphs
-- [ ] reading some relevant psychological papers for ideas, perhaps? 
