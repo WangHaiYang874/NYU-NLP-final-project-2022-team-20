@@ -22,7 +22,7 @@ class Features:
         # inputs
         self.raw_series = series
         self.stop_words = stopwords
-
+        
         # cleaned
         self.cleaned_series = None
         
@@ -30,10 +30,8 @@ class Features:
         self.vectorizer = CountVectorizer(min_df=0.0005)
         self.tfidf = TfidfTransformer()
         
-        # topics
-        self.topics_list = None
-        self.ngrams_vectorizer = CountVectorizer(ngram_range=(2,5),max_df=0.001)
-            # todo: finish the topic selection
+        # topics 
+        # todo
         
         # emoticons
         # todo
@@ -56,6 +54,10 @@ class Features:
         
         words = [word for word in words if not word in self.stop_words]
         
+        
+        # todo, replace all the regexp with a complied re as self.reFilter.
+        # I tried with the reFilter before and it seems to be buggy. 
+        
         sentence = ' '.join(words)
         sentence = re.sub("@\S+", " ", sentence)
         sentence = re.sub("https*\S+", " ", sentence)
@@ -64,7 +66,8 @@ class Features:
         sentence = re.sub('[%s]' % re.escape(string.punctuation), ' ', sentence)
         sentence = re.sub(r'\w*\d+\w*', '', sentence)
         sentence = re.sub('\s{2,}', " ", sentence)
-                        
+        
+        
         return sentence
         
     
@@ -81,33 +84,43 @@ class Features:
         
         self.tfidf.fit(X)
     
-    def build_topics(self):
-        # TODO
-        # select the n-grams according to the PMI index, 
-        # see p5 of Personality, Gender, and Age in the Language of Social Media: The Open-Vocabulary Approach 
-        pass
-    
-    def build_emoticons(self):
-        # TODO
-        # the cleaned series has no emoticons, therefore one should use the raw sequence. 
-        
-        pass
-    
     def get_tfidf(self, series):
         return self.tfidf.transform(
             self.vectorizer(series.apply(self.clean_sentence)))
     
+    # EMOTICONS
+    def extract_emoticons(self,s):
+        '''
+        extract all the emoticons from a string s
+        should return an counter or an array? 
+        '''
+        pass
+    
+    def build_emoticons(self):
+        self.emoticon_series = self.raw_series.apply(self.extract_emoticons)
+        # todo: transform this into a numpy array? that could be read into other dataset. 
+    
+    def get_emoticons(self, series):
+        return self.raw_series.apply(self.extract_emoticons)
+        # todo: transform this into a numpy array? that could be read into other dataset. 
+
+
+    # TOPICS
     def get_topics(self,series):
         # TODO
         pass
     
-    def get_emoticons(self,series):
+    def build_topics(self):
         # TODO
         pass
-        
+    
+
+    # Aggregate
+    # TODO: update after the features are completed.         
     def get_features(self,series):
         # TODO, once topics and emoticons are finished, add them here. 
         return self.get_tfidf(self,series)
+    
     def save_self(self):
         # this will not save the raw_series and cleaned series
         
@@ -117,6 +130,7 @@ class Features:
         d = (self.raw_series, self.cleaned_series)
         self.raw_series = None
         self.cleaned_series = None
+        self.emoticon_series = None
 
         with open('../models/features' +str(datetime.date.today()) + '.model', 'wb') as f:
             pickle.dump(self ,f)
