@@ -15,6 +15,9 @@ Students
 
 - [google doc readme](https://docs.google.com/document/d/1UbfpTt0nYHkp2IjpMEiPJMHar7e8d3_kyFDOBw5yV8I/edit?usp=sharing) for more information
 - [overleaf project proposal](https://www.overleaf.com/project/618d05ba58988c2754d187ec)
+- [development set](https://github.com/WangHaiYang874/NYU-NLP-final-project-2022-team-20/blob/main/data/development.csv)
+- [train set](https://drive.google.com/file/d/1SzXjA-yjqvkKfHglZyGnz2_PPt2M7vk0/view?usp=sharing)
+- [test set](https://drive.google.com/file/d/1WYFT4TRwXrKvAQ7egR5RJdftB3QFbnzF/view?usp=sharing)
 
 ### TODOs
 
