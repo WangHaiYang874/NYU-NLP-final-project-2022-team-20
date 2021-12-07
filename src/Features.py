@@ -26,7 +26,6 @@ class Features:
         # cleaned
         self.cleaned_series = None
         
-        
         # tfidf
         self.vectorizer = CountVectorizer(min_df=0.0005)
         self.tfidf = TfidfTransformer()
@@ -36,9 +35,8 @@ class Features:
         self.ngrams_vectorizer = CountVectorizer(ngram_range=(2,5),max_df=0.001)
             # todo: finish the topic selection
         
-        
         # emoticons
-        
+        # todo
     
     # CLEANING
     def clean_sentence(self,sentence):
@@ -96,7 +94,8 @@ class Features:
         pass
     
     def get_tfidf(self, series):
-        return self.tfidf.transform(self.vectorizer(series))
+        return self.tfidf.transform(
+            self.vectorizer(series.apply(self.clean_sentence)))
     
     def get_topics(self,series):
         # TODO
@@ -124,5 +123,3 @@ class Features:
         
         with open(prefix +  "data_series" + suffix + ".model",'wb') as f:
             pickle.dump(d,f)
-        
-                
