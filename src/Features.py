@@ -100,7 +100,12 @@ class Features:
         extract all the emoticons from a string s
         should return an counter or an array? 
         '''
-        return re.findall(self.emoticon_pattern,s) # extract emojis
+        emoticons = "(\:\w+\:|\<[\/\\]?3|[\(\)\\\D|\*\$][\-\^]?[\:\;\=]|[\:\;\=B8][\-\^]?[3DOPp\@\$\*\\\)\(\/\|])(?=\s|[\!\.\?]|$)"
+        another_one = "¯\\\_(ツ)_/¯"
+        emojis = re.findall(emoticons, s)
+        emojis.extend(re.findall(another_one, s))
+        #returns a list of all emojis found in string s
+        return emojis
     
     def build_emoticons(self):
         self.emoticon_series = self.raw_series.apply(self.extract_emoticons)
