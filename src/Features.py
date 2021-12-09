@@ -98,7 +98,7 @@ class Features:
         extract all the emoticons from a string s
         should return an counter or an array? 
         '''
-        pass
+        return (c for c in s if c in emoji.UNICODE_EMOJI['en']) # extract emojis
     
     def build_emoticons(self):
         self.emoticon_series = self.raw_series.apply(self.extract_emoticons)
