@@ -117,7 +117,7 @@ class Features:
         dictionary.filter_extremes(no_below=15, no_above=0.1, keep_n= 100000)
         bow_corpus = [dictionary.doc2bow(doc) for doc in processed_doc]
         self.lda_model = gensim.models.LdaMulticore(bow_corpus, 
-                                   num_topics = 8, 
+                                   num_topics = 200, 
                                    id2word = dictionary,                                    
                                    passes = 10,
                                    workers = 2)
