@@ -35,9 +35,11 @@ class Features:
         
         # topics 
         self.lda_model = None
-        # todo
         
         # emoticons
+        with open('Emoticon_Dict.p', 'rb') as fp:
+            self.emoticon_dict = pickle.load(fp)
+        self.emoticon_pattern = re.compile('|'.join(k for k in self.emoticon_dict))
         # todo
     
     # CLEANING
@@ -98,7 +100,7 @@ class Features:
         extract all the emoticons from a string s
         should return an counter or an array? 
         '''
-        return (c for c in s if c in emoji.UNICODE_EMOJI['en']) # extract emojis
+        return re.findall(self.emoticon_pattern,s) # extract emojis
     
     def build_emoticons(self):
         self.emoticon_series = self.raw_series.apply(self.extract_emoticons)
