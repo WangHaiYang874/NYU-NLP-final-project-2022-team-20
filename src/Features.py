@@ -4,6 +4,8 @@ from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 import pickle
 import datetime
+import gensim
+
 
 
 class Features:
@@ -31,6 +33,7 @@ class Features:
         self.tfidf = TfidfTransformer()
         
         # topics 
+
         # todo
         
         # emoticons
@@ -106,13 +109,23 @@ class Features:
 
 
     # TOPICS
-    def get_topics(self,series):
-        # TODO
-        pass
-    
+
     def build_topics(self):
-        # TODO
         pass
+        
+        
+    def get_topics(self,series):
+        dictionary = gensim.corpora.Dictionary(series.apply(self.clean_sentence))
+        dictionary.filter_extremes(no_below=15, no_above=0.1, keep_n= 100000)
+        bow_corpus = [dictionary.doc2bow(doc) for doc in series.apply(self.clean_sentence)]
+        return gensim.models.LdaMulticore(bow_corpus, 
+                                   num_topics = 8, 
+                                   id2word = dictionary,                                    
+                                   passes = 10,
+                                   workers = 2)
+        
+    
+    
     
 
     # Aggregate
