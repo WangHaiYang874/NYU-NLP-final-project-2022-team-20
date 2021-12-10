@@ -25,9 +25,9 @@ class Features:
         
         # datas
         self.raw_series = series
-        self.stop_words = stopwords
-        with open('Emoticon_Dict.p', 'rb') as fp:
-            self.emoticons = pickle.load(fp).keys()
+        self.stopwords =  open(stopwords,'r').read().split()
+        with open('../data/Emoticon_Dict.p', 'rb') as fp:
+            self.emoticons = sorted(list(pickle.load(fp).keys()))
         self.cleaned_series = None
         
         # models
@@ -55,7 +55,7 @@ class Features:
             
             words[i] = word
         
-        words = [word for word in words if not word in self.stop_words]
+        words = [word for word in words if not word in self.stopwords]
         
         
         # todo, replace all the regexp with a complied re as self.reFilter.
@@ -109,8 +109,6 @@ class Features:
         # setting all the datas to non to save only the models. 
         self.raw_series = None
         self.cleaned_series = None
-        self.stop_words = None
-        self.emoticons = None
         
         with open(prefix + suffix + '.model', 'wb') as f:
             pickle.dump(self ,f)
@@ -132,7 +130,7 @@ class Features:
     # GETTING FEATURES
     def get_tfidf(self, cleaned_series):
         return self.tfidf.transform(
-            self.vectorizer(cleaned_series))
+            self.vectorizer.transform(cleaned_series))
 
     def extract_emoticons(self,s):
         '''
@@ -152,7 +150,7 @@ class Features:
         bows = [self.dictionary.doc2bow(doc) for doc in processed_doc]
         ret = []
         for doc in bows:
-            prob = self.lda_model.get_document_topics(doc, minimal_probability=0)
+            prob = self.lda_model.get_document_topics(doc, minimum_probability=0)
             prob.sort(key=lambda x:x[0])
             prob = [i[1] for i in prob]
             ret.append(prob)
@@ -164,5 +162,5 @@ class Features:
         tfidfs = self.get_tfidf(cleaned_series)
         emoticons = self.get_emoticons(series)
         topics = self.get_topics(cleaned_series)
-        return zip(tfidfs,emoticons,topics)
+        return list(zip(tfidfs,emoticons,topics))
         # TODO: I need to reshaping this
