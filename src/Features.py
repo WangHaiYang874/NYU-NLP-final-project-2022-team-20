@@ -114,6 +114,15 @@ class Features:
             pickle.dump(self ,f)
             
         return prefix + suffix + '.debug', 'wb'
+    
+    def build_dimension_reduct(self):
+        # todo
+        
+        self.dimen_red = None
+        
+        # 你先把 cleaned 的 tfidf算出来, 然后对这个数据进行dimension reduce.
+        
+        
         
     def build_model(self):
         print('cleaning the copora')
@@ -122,15 +131,23 @@ class Features:
         self.build_tfidf()
         print('building lda topic model')
         self.build_topics()
+        print('building dimension reduct')
+        self.build_dimension_reduct()
         print('model built, saving it')
         path = self.save_self()
         print('model saved at:')
         return path
+        
+    
 
     # GETTING FEATURES
     def get_tfidf(self, cleaned_series):
         return self.tfidf.transform(
             self.vectorizer.transform(cleaned_series))
+            
+    def get_reduct_tfidf(self, cleaned_series):
+        return self.dimen_red.transform(self.get_tfidf(cleaned_series))
+        
 
     def extract_emoticons(self,s):
         '''
@@ -157,9 +174,14 @@ class Features:
         
         return np.array(ret)
         
-    def get_features(self,series):
+    def get_features(self,series, if_compress=True):
+        
         cleaned_series = series.apply(self.clean_sentence)
-        tfidfs = self.get_tfidf(cleaned_series)
+        if if_compress:
+            tfidfs = self.get_reduct_tfidf(cleaned_series)
+        else:            
+            tfidfs = self.get_tfidf(cleaned_series)
+        
         emoticons = self.get_emoticons(series)
         topics = self.get_topics(cleaned_series)
         return list(zip(tfidfs,emoticons,topics))
