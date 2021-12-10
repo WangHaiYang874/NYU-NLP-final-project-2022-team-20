@@ -8,6 +8,7 @@ import datetime
 import gensim
 import numpy as np
 from gensim.utils import simple_preprocess
+from sklearn import random_projection
 
 class Features:
     # class attr
@@ -34,6 +35,7 @@ class Features:
         
         self.vectorizer = CountVectorizer(min_df=0.0005)
         self.tfidf = TfidfTransformer()
+        self.dimen_red = TfidfTransformer()
         self.lda_model = None
         self.dictionary = None
         
@@ -91,7 +93,13 @@ class Features:
             num_topics = 200, 
             id2word = self.dictionary,                                    
             passes = 10,
-            workers = 2)
+            workers = 4)
+
+    def build_dimension_reduct(self):
+        # todo
+        self.dimen_red = random_projection.SparseRandomProjection(n_components=5000)
+        
+        # 你先把 cleaned 的 tfidf算出来, 然后对这个数据进行dimension reduce.        
             
     def save_self(self):
         # this will not save the raw_series and cleaned series
@@ -113,15 +121,7 @@ class Features:
         with open(prefix + suffix + '.model', 'wb') as f:
             pickle.dump(self ,f)
             
-        return prefix + suffix + '.debug', 'wb'
-    
-    def build_dimension_reduct(self):
-        # todo
-        
-        self.dimen_red = None
-        
-        # 你先把 cleaned 的 tfidf算出来, 然后对这个数据进行dimension reduce.
-        
+        return prefix + suffix + '.model', 'wb'
         
         
     def build_model(self):
@@ -146,7 +146,7 @@ class Features:
             self.vectorizer.transform(cleaned_series))
             
     def get_reduct_tfidf(self, cleaned_series):
-        return self.dimen_red.transform(self.get_tfidf(cleaned_series))
+        return self.dimen_red.fit_transform(self.get_tfidf(cleaned_series))
         
 
     def extract_emoticons(self,s):
@@ -174,7 +174,7 @@ class Features:
         
         return np.array(ret)
         
-    def get_features(self,series, if_compress=True):
+    def get_features(self,series, if_compress=False):
         
         cleaned_series = series.apply(self.clean_sentence)
         if if_compress:
