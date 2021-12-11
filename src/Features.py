@@ -121,7 +121,7 @@ class Features:
         with open(prefix + suffix + '.model', 'wb') as f:
             pickle.dump(self ,f)
             
-        return prefix + suffix + '.model', 'wb'
+        return prefix + suffix + '.debug', 'wb'
         
         
     def build_model(self):
@@ -174,13 +174,10 @@ class Features:
         
         return np.array(ret)
         
-    def get_features(self,series, if_compress=False):
+    def get_features(self,series):
         
         cleaned_series = series.apply(self.clean_sentence)
-        if if_compress:
-            tfidfs = self.get_reduct_tfidf(cleaned_series)
-        else:            
-            tfidfs = self.get_tfidf(cleaned_series)
+        tfidfs = self.get_tfidf(cleaned_series)
         
         emoticons = self.get_emoticons(series)
         topics = self.get_topics(cleaned_series)
