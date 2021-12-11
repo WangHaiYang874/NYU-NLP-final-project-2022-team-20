@@ -176,21 +176,9 @@ class Features:
         
         return np.array(ret)
         
-<<<<<<< HEAD
     def get_features(self,series):
-        
         cleaned_series = series.apply(self.clean_sentence)
-=======
-    # def get_features(self,series, if_compress=False):
-    def get_features(self,series):
-        
-        cleaned_series = series.apply(self.clean_sentence)
-        # if if_compress:
-            # tfidfs = self.get_reduct_tfidf(cleaned_series)
-        # else:            
->>>>>>> 7119bcadf7ed58953eacfbb3dbd006813a6fc97e
         tfidfs = self.get_tfidf(cleaned_series)
-        
         emoticons = self.get_emoticons(series)
         topics = self.get_topics(cleaned_series)
         return list(zip(tfidfs,emoticons,topics))
