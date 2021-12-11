@@ -11,6 +11,11 @@ from gensim.utils import simple_preprocess
 from sklearn import random_projection
 
 class Features:
+    '''
+    initialize this object with an array of corpus, and a file storing a list of stopwords.
+    after initialization, run self.build() to build the model
+    Then, for any array of corpus, use self.get_features(corpus) to get the features calculated from this corpus. 
+    '''
     # class attr
     
     wnl = WordNetLemmatizer()
@@ -24,7 +29,7 @@ class Features:
     
     def __init__(self, series, stopwords):
         
-        # datas
+        # data
         self.raw_series = series
         self.stopwords =  open(stopwords,'r').read().split()
         with open('../data/Emoticon_Dict.p', 'rb') as fp:
@@ -43,11 +48,15 @@ class Features:
     
     # BUILDING
     def clean_sentence(self,sentence):
+        '''This function cleans a sentence
+        - lower every char, remain only ascii characters
+        - lemmatize every words
+        - filter some stopwords
+        - remove email, http links, punctuations, etc
+        '''
+
+        words = nltk.tokenize.word_tokenize(sentence.lower().encode('ascii', 'ignore').decode())
         
-        # lower and only ascii
-        words = sentence.lower().encode('ascii', 'ignore').decode().split()
-        
-        # lemmatizing
         for i in range(len(words)):
             
             word = words[i]
@@ -59,10 +68,6 @@ class Features:
         
         words = [word for word in words if not word in self.stopwords]
         
-        
-        # todo, replace all the regexp with a complied re as self.reFilter.
-        # I tried with the reFilter before and it seems to be buggy. 
-        
         sentence = ' '.join(words)
         sentence = re.sub("@\S+", " ", sentence)
         sentence = re.sub("https*\S+", " ", sentence)
@@ -73,10 +78,9 @@ class Features:
         sentence = re.sub('\s{2,}', " ", sentence)
                 
         return sentence
-    
+            
     def build_tfidf(self):
-        assert(self.cleaned_series.any())
-                
+        '''build the tfidf score with the cleaned series'''
         X = self.vectorizer.fit_transform(
             self.cleaned_series)
         
@@ -95,11 +99,10 @@ class Features:
             passes = 10,
             workers = 4)
 
-    def build_dimension_reduct(self):
-        # todo
-        self.dimen_red = random_projection.SparseRandomProjection(n_components=5000)
+    # def build_dimension_reduct(self):
+    #     self.dimen_red = random_projection.SparseRandomProjection(n_components=5000)
+    #     # this methods does not work, we should not use it 
         
-        # 你先把 cleaned 的 tfidf算出来, 然后对这个数据进行dimension reduce.        
             
     def save_self(self):
         # this will not save the raw_series and cleaned series
@@ -131,22 +134,21 @@ class Features:
         self.build_tfidf()
         print('building lda topic model')
         self.build_topics()
-        print('building dimension reduct')
-        self.build_dimension_reduct()
+        # print('building dimension reduct')
+        # self.build_dimension_reduct()
         print('model built, saving it')
         path = self.save_self()
         print('model saved at:')
         return path
-        
-    
+
 
     # GETTING FEATURES
     def get_tfidf(self, cleaned_series):
         return self.tfidf.transform(
             self.vectorizer.transform(cleaned_series))
             
-    def get_reduct_tfidf(self, cleaned_series):
-        return self.dimen_red.fit_transform(self.get_tfidf(cleaned_series))
+    # def get_reduct_tfidf(self, cleaned_series):
+    #     return self.dimen_red.fit_transform(self.get_tfidf(cleaned_series))
         
 
     def extract_emoticons(self,s):
@@ -174,15 +176,16 @@ class Features:
         
         return np.array(ret)
         
-    def get_features(self,series, if_compress=False):
+    # def get_features(self,series, if_compress=False):
+    def get_features(self,series):
         
         cleaned_series = series.apply(self.clean_sentence)
-        if if_compress:
-            tfidfs = self.get_reduct_tfidf(cleaned_series)
-        else:            
-            tfidfs = self.get_tfidf(cleaned_series)
+        # if if_compress:
+            # tfidfs = self.get_reduct_tfidf(cleaned_series)
+        # else:            
+        tfidfs = self.get_tfidf(cleaned_series)
         
         emoticons = self.get_emoticons(series)
         topics = self.get_topics(cleaned_series)
         return list(zip(tfidfs,emoticons,topics))
-        # TODO: I need to reshaping this
+        
