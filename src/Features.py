@@ -1,16 +1,14 @@
 import re
 import string
-
 import nltk
 from nltk.stem import WordNetLemmatizer
-
-import gensim
-from gensim.models import TfidfModel
-from gensim.utils import simple_preprocess
-
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 import pickle
 import datetime
+import gensim
 import numpy as np
+from gensim.utils import simple_preprocess
+from sklearn import random_projection
 
 class Features:
     '''
@@ -40,10 +38,12 @@ class Features:
         
         # models
         
-        self.vectorizer = CountVectorizer(max_features=4000)
+        self.vectorizer = CountVectorizer(min_df=0.0005)
         self.tfidf = TfidfTransformer()
+        self.dimen_red = TfidfTransformer()
         self.lda_model = None
         self.dictionary = None
+        
     
     
     # BUILDING
@@ -81,8 +81,10 @@ class Features:
             
     def build_tfidf(self):
         '''build the tfidf score with the cleaned series'''
-        self.tfidf.fit(self.vectorizer.fit_transform(
-            self.cleaned_series))
+        X = self.vectorizer.fit_transform(
+            self.cleaned_series)
+        
+        self.tfidf.fit(X)
         
     def build_topics(self):
         
@@ -92,16 +94,30 @@ class Features:
         bow_corpus = [self.dictionary.doc2bow(doc) for doc in processed_doc]
         self.lda_model = gensim.models.LdaMulticore(
             bow_corpus, 
-            num_topics = 300, 
+            num_topics = 200, 
             id2word = self.dictionary,                                    
             passes = 10,
             workers = 4)
+
+    # def build_dimension_reduct(self):
+    #     self.dimen_red = random_projection.SparseRandomProjection(n_components=5000)
+    #     # this methods does not work, we should not use it 
+        
             
     def save_self(self):
-
+        # this will not save the raw_series and cleaned series
+        
         suffix = str(datetime.date.today())
         prefix = '../models/features'
         
+        # setting the data to none, avoiding to save a large model file with all the datas. 
+        
+        # this is the debug version of the model, where all datas are saved
+        with open(prefix + suffix + '.debug', 'wb') as f:
+            pickle.dump(self ,f)
+        
+        
+        # setting all the datas to non to save only the models. 
         self.raw_series = None
         self.cleaned_series = None
         
@@ -109,7 +125,8 @@ class Features:
             pickle.dump(self ,f)
             
         return prefix + suffix + '.debug', 'wb'
-
+        
+        
     def build_model(self):
         print('cleaning the copora')
         self.cleaned_series = self.raw_series.apply(self.clean_sentence)
@@ -117,15 +134,22 @@ class Features:
         self.build_tfidf()
         print('building lda topic model')
         self.build_topics()
+        # print('building dimension reduct')
+        # self.build_dimension_reduct()
         print('model built, saving it')
         path = self.save_self()
         print('model saved at:')
         return path
 
+
     # GETTING FEATURES
     def get_tfidf(self, cleaned_series):
         return self.tfidf.transform(
             self.vectorizer.transform(cleaned_series))
+            
+    # def get_reduct_tfidf(self, cleaned_series):
+    #     return self.dimen_red.fit_transform(self.get_tfidf(cleaned_series))
+        
 
     def extract_emoticons(self,s):
         '''
@@ -149,17 +173,13 @@ class Features:
             prob.sort(key=lambda x:x[0])
             prob = [i[1] for i in prob]
             ret.append(prob)
+        
         return np.array(ret)
         
     def get_features(self,series):
-        print('this could take some time, please be patient')
         cleaned_series = series.apply(self.clean_sentence)
-        print('getting tfidfs')
         tfidfs = self.get_tfidf(cleaned_series)
-        print('getting emoticons')
         emoticons = self.get_emoticons(series)
-        print('getting topics')
         topics = self.get_topics(cleaned_series)
+        return list(zip(tfidfs,emoticons,topics))
         
-        print('aggregating')
-        return [np.concatenate(a,axis=None) for a in zip(tfidfs,emoticons,topics)]
