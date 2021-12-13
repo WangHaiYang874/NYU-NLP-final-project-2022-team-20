@@ -181,5 +181,5 @@ class Features:
         tfidfs = self.get_tfidf(cleaned_series)
         emoticons = self.get_emoticons(series)
         topics = self.get_topics(cleaned_series)
-        return list(zip(tfidfs,emoticons,topics))
+        return np.array([np.concatenate(row,axis=None) for row in zip(tfidfs,emoticons,topics)])
         
