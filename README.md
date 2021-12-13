@@ -24,20 +24,26 @@ Students
 Please put your name next to the todo that you would like to do or you have done. Otherwise, the team won't give you credit for this project. 
 
 - [x] the proposal: finished collectively
-- [ ] feature extraction/selection/data cleaning
-    - [ ] emoticons
-    - [x] tfidf: (Haiyang and Vincent)
-    - [x] topic extraction: (Vincent)
-    - [x] development dataset: (Haiyang)
-    - [x] feature selection: (Haiyang)
-    - [ ] dimension reduction
-- [ ] first layer models: (Haiyang)
-- [ ] second layer model: this the the neural network taking input from previous layer to predict personality. (Haiyang)
-    - [ ] chunk max pool, 
+- [x] feature extraction/selection/data cleaning
+    - [x] emoticons
+    - [x] tfidf: (_Haiyang_ and _Vincent_)
+    - [x] topic extraction: (_Vincent_)
+    - [x] development dataset: (_Haiyang_)
+    - [x] feature selection: (_Haiyang_)
+    - [x] dimension reduction: done by Vincent. However, we decided that to not reduce the dimension. 
+- [x] first layer models: (_Haiyang_, _Vincent_)
+- [x] second layer model: this the the neural network taking input from previous layer to predict personality. (_Haiyang_)
+    - [x] chunk max pool, 
     - [x] activations, 
-    - [ ] k max
-    - [ ] deeper models when the dataset is large enough?
-    - [ ] profiling the training process. 
-- [ ] evaluation 
-- [ ] writing the paper
-    - [ ] draw graphs
+    - [x] k max
+    - [x] deeper models when the dataset is large enough?
+    - [x] profiling the training process. 
+    We discovered that the first layer model is just too good. So we decided that we are not using a NN for the second layer. Instead, we will use a simple random forest decision tree. 
+    - [x] decision tree
+- [ ] building the model (_Vincent_, _Haiyang_)
+    - [ ] feature
+    - [ ] first layer
+    - [ ] second layer
+- [ ] evaluation (_Oishika_)
+- [x] presentation (_Oishika_, _Vincent_, _Haiyang_)
+- [x] writing the paper (_Oishika_, _Arthur_)
