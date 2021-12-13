@@ -178,7 +178,7 @@ class Features:
         
     def get_features(self,series):
         cleaned_series = series.apply(self.clean_sentence)
-        tfidfs = self.get_tfidf(cleaned_series)
+        tfidfs = self.get_tfidf(cleaned_series).todense()
         emoticons = self.get_emoticons(series)
         topics = self.get_topics(cleaned_series)
         return np.array([np.concatenate(row,axis=None) for row in zip(tfidfs,emoticons,topics)])
