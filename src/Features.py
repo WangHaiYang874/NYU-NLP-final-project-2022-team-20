@@ -178,11 +178,7 @@ class Features:
         
     def get_features(self,series):
         cleaned_series = series.apply(self.clean_sentence)
-<<<<<<< HEAD
         tfidfs = np.asarray(self.get_tfidf(cleaned_series).todense())
-=======
-        tfidfs = np.asarray(self.get_tfidf(cleaned_series)).todense()
->>>>>>> parent of ef7a3b6 (testing)
         emoticons = self.get_emoticons(series)
         topics = self.get_topics(cleaned_series)
         return np.concatenate((tfidfs.todense(),topics,emoticons),axis=1)
