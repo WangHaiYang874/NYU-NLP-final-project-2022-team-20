@@ -128,7 +128,7 @@ class Features:
         
         
     def build_model(self):
-        print('cleaning the copora')
+        print('cleaning the corpora')
         self.cleaned_series = self.raw_series.apply(self.clean_sentence)
         print('building tfidf model')
         self.build_tfidf()
