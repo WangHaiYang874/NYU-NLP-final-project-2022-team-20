@@ -9,6 +9,9 @@ import gensim
 import numpy as np
 from gensim.utils import simple_preprocess
 from sklearn import random_projection
+import multiprocessing
+from multiprocessing import Pool
+import scipy.sparse as sp
 
 class Features:
     '''
@@ -43,8 +46,6 @@ class Features:
         self.dimen_red = TfidfTransformer()
         self.lda_model = None
         self.dictionary = None
-        
-    
     
     # BUILDING
     def clean_sentence(self,sentence):
@@ -149,7 +150,16 @@ class Features:
             
     # def get_reduct_tfidf(self, cleaned_series):
     #     return self.dimen_red.fit_transform(self.get_tfidf(cleaned_series))
-        
+
+    def parallelize_get_tfidf(self,cleaned_series):
+        a = np.array_split(cleaned_series, multiprocessing.cpu_count())
+        pool = Pool(multiprocessing.cpu_count()-2)
+        #df = pd.concat(pool.map(func, [a,b,c,d,e]))
+        result = sp.vstack(pool.map(self.get_tfidf, a), format='csr')
+        pool.close()
+        pool.join()
+        return result
+
 
     def extract_emoticons(self,s):
         '''
@@ -178,7 +188,7 @@ class Features:
         
     def get_features(self,series):
         cleaned_series = series.apply(self.clean_sentence)
-        tfidfs = np.asarray(self.get_tfidf(cleaned_series).todense())
+        tfidfs = np.asarray(self.parallelize_get_tfidf(cleaned_series).todense())
         emoticons = self.get_emoticons(series)
         topics = self.get_topics(cleaned_series)
         return np.concatenate((tfidfs,topics,emoticons),axis=1)
