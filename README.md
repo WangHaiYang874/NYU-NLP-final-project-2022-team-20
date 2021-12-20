@@ -30,7 +30,8 @@ Please put your name next to the todo that you would like to do or you have done
     - [x] topic extraction: (_Vincent_)
     - [x] development dataset: (_Haiyang_)
     - [x] feature selection: (_Haiyang_)
-    - [x] dimension reduction: done by Vincent. However, we decided that to not reduce the dimension. 
+    - [x] dimension reduction: done by _Vincent_. However, we decided that to not reduce the dimension. 
+    - [x] parallel feature extracting (_Vincent_)
 - [x] first layer models: (_Haiyang_, _Vincent_)
 - [x] second layer model: this the the neural network taking input from previous layer to predict personality. (_Haiyang_)
     - [x] chunk max pool, 
@@ -40,10 +41,10 @@ Please put your name next to the todo that you would like to do or you have done
     - [x] profiling the training process. 
     We discovered that the first layer model is just too good. So we decided that we are not using a NN for the second layer. Instead, we will use a simple random forest decision tree. 
     - [x] decision tree
-- [ ] building the model (_Vincent_, _Haiyang_)
-    - [ ] feature
-    - [ ] first layer
-    - [ ] second layer
-- [ ] evaluation (_Oishika_)
+- [x] building the model (_Vincent_, _Haiyang_)
+    - [x] feature
+    - [x] first layer
+    - [x] second layer
+- [x] evaluation (_Oishika_, _Vincent_)
 - [x] presentation (_Oishika_, _Vincent_, _Haiyang_)
-- [x] writing the paper (_Oishika_, _Arthur_)
+- [x] writing the paper (_Oishika_ 70%, others 30%)
